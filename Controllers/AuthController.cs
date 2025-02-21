@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using FYPIBDPatientApp.Services;
+using FYPIBDPatientApp.Dtos;
 
 namespace FYPIBDPatientApp.Controllers
 {
@@ -22,7 +23,7 @@ namespace FYPIBDPatientApp.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] Models.LoginDto model)
+        public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
@@ -45,7 +46,7 @@ namespace FYPIBDPatientApp.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] Models.RegisterDto model)
+        public async Task<IActionResult> Register([FromBody] RegisterDto model)
         {
             if (!ModelState.IsValid) 
             {

@@ -1,4 +1,4 @@
-﻿namespace FYPIBDPatientApp.Models
+﻿namespace FYPIBDPatientApp.Dtos
 {
     public class RegisterDto
     {
