@@ -1,0 +1,6 @@
+@FYPIBDPatientApp_HostAddress = http://localhost:5276
+
+GET {{FYPIBDPatientApp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
