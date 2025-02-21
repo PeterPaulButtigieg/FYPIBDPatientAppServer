@@ -14,8 +14,8 @@ namespace FYPIBDPatientApp.Models
         [ForeignKey(nameof(UserId))]
         public ApplicationUser User { get; set; }
 
-        public string title { get; set; }
+        public string Title { get; set; }
 
-        public string specialisation {  get; set; }
+        public string Specialisation {  get; set; }
     }
 }
