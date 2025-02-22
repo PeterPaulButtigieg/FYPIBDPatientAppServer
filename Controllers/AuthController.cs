@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using FYPIBDPatientApp.Services;
 using FYPIBDPatientApp.Dtos;
+using FYPIBDPatientApp.Models;
 
 namespace FYPIBDPatientApp.Controllers
 {
@@ -53,7 +54,7 @@ namespace FYPIBDPatientApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = new IdentityUser 
+            var user = new ApplicationUser 
             { 
                 UserName = model.Email,
                 Email = model.Email
