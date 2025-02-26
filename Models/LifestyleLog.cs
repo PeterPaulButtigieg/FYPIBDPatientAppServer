@@ -5,11 +5,11 @@ namespace FYPIBDPatientApp.Models
 {
     public class LifestyleLog
     {
-        [Key]
+        //[Key]
         public int Id { get; set; }
 
-        public int PatientId { get; set; }
-        [ForeignKey(nameof(PatientId))]
+        public string PatientId { get; set; }
+        //[ForeignKey(nameof(PatientId))]
         public ApplicationUser Patient { get; set; }
 
         public DateTime Date { get; set; }
