@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace FYPIBDPatientApp.Migrations
 {
     /// <inheritdoc />
@@ -35,7 +37,6 @@ namespace FYPIBDPatientApp.Migrations
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     MobileNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     isDeleted = table.Column<bool>(type: "bit", nullable: false),
                     JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Specialisation = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -218,7 +219,6 @@ namespace FYPIBDPatientApp.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Action = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TableName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
@@ -292,6 +292,7 @@ namespace FYPIBDPatientApp.Migrations
                     PatientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     MealType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Calories = table.Column<int>(type: "int", nullable: false),
                     Notes = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -452,6 +453,25 @@ namespace FYPIBDPatientApp.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "2E1B51E9-1B52-424D-B4DA-07AFA32FD9DD", "2", "HCPRO", "HCPRO" },
+                    { "F0C7924B-3C4E-4C5F-B8F5-1EE0D65D422F", "1", "PATIENT", "PATIENT" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "DateOfBirth", "Email", "EmailConfirmed", "FirstName", "Gender", "JobTitle", "LastName", "LockoutEnabled", "LockoutEnd", "MobileNumber", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Specialisation", "TwoFactorEnabled", "UserName", "isDeleted" },
+                values: new object[] { "134c1566-3f64-4ab4-b1e7-2ffe11f43e32", 0, "b1bafba0-c570-427e-8e76-75105b00df02", new DateTime(1988, 2, 26, 0, 0, 0, 0, DateTimeKind.Unspecified), "drsmith@gmail.com", true, "John", "M", null, "Smith", false, null, "23778888", "DRSMITH@GMAIL.COM", "DRSMITH@GMAIL.COM", "AQAAAAIAAYagAAAAEEuaKmLKc8powhaW/wq+aDbyKUhNrLgz4p+gx3quk+/DXPYjNw2SgvcSu+7QwfrBtw==", null, false, "94d9da69-ecd2-422b-8b33-ec968ee9ae32", null, false, "drsmith@gmail.com", false });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "2E1B51E9-1B52-424D-B4DA-07AFA32FD9DD", "134c1566-3f64-4ab4-b1e7-2ffe11f43e32" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Appointments_HealthcareProfessionalId",

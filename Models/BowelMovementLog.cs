@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FYPIBDPatientApp.Models
 {
-    public class Appointment
+    public class BowelMovementLog
     {
         //[Key]
         public int Id { get; set; }
@@ -12,11 +12,13 @@ namespace FYPIBDPatientApp.Models
         //[ForeignKey(nameof(PatientId))]
         public ApplicationUser Patient { get; set; }
 
-        public DateTime Date {  get; set; }
+        public DateTime Date { get; set; }
 
-        public string Venue { get; set; }
+        public string StoolType { get; set; }
 
-        public string AppointmentType { get; set; }
+        public bool Blood { get; set; }
+
+        public string Urgency { get; set; }
 
         public string Notes { get; set; }
     }

@@ -25,7 +25,8 @@ namespace FYPIBDPatientApp.Controllers
 
         //Post: api/medication/addmedication
         [HttpPost("addmedication")]
-        [Authorize(Roles = "HCPro")]
+        [Authorize]
+        [Authorize(Roles = "HCPRO")]
         public async Task<IActionResult> AddMedication([FromBody] AddMedicationDto dto)
         {
             if (!ModelState.IsValid)
@@ -52,7 +53,8 @@ namespace FYPIBDPatientApp.Controllers
 
         //Get: api/medication/"id"
         [HttpGet("{id}")]
-        [Authorize(Roles = "HCPro")]
+        [Authorize]
+        [Authorize(Roles = "HCPRO")]
         public async Task<IActionResult> GetMedicationById(int id)
         {
             var medication = await _context.Medications.FindAsync(id);
@@ -70,7 +72,8 @@ namespace FYPIBDPatientApp.Controllers
 
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "HCPro")]
+        [Authorize]
+        [Authorize(Roles = "HCPRO")]
         public async Task<IActionResult> UpdateMedication(int id, [FromBody] UpdateMedicationDto dto)
         {  
             if (id != dto.Id)

@@ -9,9 +9,9 @@ namespace FYPIBDPatientApp.Models
         public string Gender {  get; set; }
         public DateTime DateOfBirth { get; set; }
         public string MobileNumber { get; set; }
-        public string Address { get; set; }
 
         //Daily Logs
+        public List<BowelMovementLog> BowelMovementLog { get; set; } = new List<BowelMovementLog>();
         public List<DietaryLog> DietaryLog { get; set; } = new List<DietaryLog>();
         public List<HydrationLog> HydrationLog { get; set; } = new List<HydrationLog>();
         public List<LifestyleLog> LifestyleLog { get; set; } = new List<LifestyleLog>();
@@ -26,7 +26,7 @@ namespace FYPIBDPatientApp.Models
         //Legal
         public List<AuditLog> AuditLog { get; set; } = new List<AuditLog>();
         public Concent Concent { get; set; }
-        public bool isDeleted { get; set; }
+        public bool isDeleted { get; set; } 
 
         //HealthCare Professionals, they can be sick too. Anyways Identity doesnt like separate user collections.
         public string? JobTitle { get; set; }

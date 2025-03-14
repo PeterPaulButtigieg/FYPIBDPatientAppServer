@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FYPIBDPatientApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250225125320_1")]
+    [Migration("20250313082845_1")]
     partial class _1
     {
         /// <inheritdoc />
@@ -32,10 +32,6 @@ namespace FYPIBDPatientApp.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -120,6 +116,30 @@ namespace FYPIBDPatientApp.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "134c1566-3f64-4ab4-b1e7-2ffe11f43e32",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "b1bafba0-c570-427e-8e76-75105b00df02",
+                            DateOfBirth = new DateTime(1988, 2, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "drsmith@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "John",
+                            Gender = "M",
+                            LastName = "Smith",
+                            LockoutEnabled = false,
+                            MobileNumber = "23778888",
+                            NormalizedEmail = "DRSMITH@GMAIL.COM",
+                            NormalizedUserName = "DRSMITH@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEuaKmLKc8powhaW/wq+aDbyKUhNrLgz4p+gx3quk+/DXPYjNw2SgvcSu+7QwfrBtw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "94d9da69-ecd2-422b-8b33-ec968ee9ae32",
+                            TwoFactorEnabled = false,
+                            UserName = "drsmith@gmail.com",
+                            isDeleted = false
+                        });
                 });
 
             modelBuilder.Entity("FYPIBDPatientApp.Models.Appointment", b =>
@@ -171,10 +191,6 @@ namespace FYPIBDPatientApp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Action")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TableName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -263,6 +279,9 @@ namespace FYPIBDPatientApp.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Calories")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -531,6 +550,22 @@ namespace FYPIBDPatientApp.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "F0C7924B-3C4E-4C5F-B8F5-1EE0D65D422F",
+                            ConcurrencyStamp = "1",
+                            Name = "PATIENT",
+                            NormalizedName = "PATIENT"
+                        },
+                        new
+                        {
+                            Id = "2E1B51E9-1B52-424D-B4DA-07AFA32FD9DD",
+                            ConcurrencyStamp = "2",
+                            Name = "HCPRO",
+                            NormalizedName = "HCPRO"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -618,6 +653,13 @@ namespace FYPIBDPatientApp.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "134c1566-3f64-4ab4-b1e7-2ffe11f43e32",
+                            RoleId = "2E1B51E9-1B52-424D-B4DA-07AFA32FD9DD"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

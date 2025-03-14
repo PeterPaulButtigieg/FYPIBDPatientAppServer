@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FYPIBDPatientApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250226163627_Added AuditLog Functionality")]
-    partial class AddedAuditLogFunctionality
+    [Migration("20250313083124_2")]
+    partial class _2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,10 +32,6 @@ namespace FYPIBDPatientApp.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -120,6 +116,30 @@ namespace FYPIBDPatientApp.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "134c1566-3f64-4ab4-b1e7-2ffe11f43e32",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a1b80a28-5ac2-47f9-8c2b-0768909f2978",
+                            DateOfBirth = new DateTime(1988, 2, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "drsmith@gmail.com",
+                            EmailConfirmed = true,
+                            FirstName = "John",
+                            Gender = "M",
+                            LastName = "Smith",
+                            LockoutEnabled = false,
+                            MobileNumber = "23778888",
+                            NormalizedEmail = "DRSMITH@GMAIL.COM",
+                            NormalizedUserName = "DRSMITH@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMvC3EwcbkWRO+t3TCHKXg0LC0KRHLrGiFWaWxY8y7ApIIX299ORe41btq01ScPcWA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "5740cf84-cc07-46b0-b02c-fe9951559108",
+                            TwoFactorEnabled = false,
+                            UserName = "drsmith@gmail.com",
+                            isDeleted = false
+                        });
                 });
 
             modelBuilder.Entity("FYPIBDPatientApp.Models.Appointment", b =>
@@ -186,6 +206,43 @@ namespace FYPIBDPatientApp.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AuditLogs");
+                });
+
+            modelBuilder.Entity("FYPIBDPatientApp.Models.BowelMovementLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Blood")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PatientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("StoolType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Urgency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("BowelMovementLogs");
                 });
 
             modelBuilder.Entity("FYPIBDPatientApp.Models.Concent", b =>
@@ -530,6 +587,22 @@ namespace FYPIBDPatientApp.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "F0C7924B-3C4E-4C5F-B8F5-1EE0D65D422F",
+                            ConcurrencyStamp = "1",
+                            Name = "PATIENT",
+                            NormalizedName = "PATIENT"
+                        },
+                        new
+                        {
+                            Id = "2E1B51E9-1B52-424D-B4DA-07AFA32FD9DD",
+                            ConcurrencyStamp = "2",
+                            Name = "HCPRO",
+                            NormalizedName = "HCPRO"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -617,6 +690,13 @@ namespace FYPIBDPatientApp.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "134c1566-3f64-4ab4-b1e7-2ffe11f43e32",
+                            RoleId = "2E1B51E9-1B52-424D-B4DA-07AFA32FD9DD"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -666,6 +746,17 @@ namespace FYPIBDPatientApp.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FYPIBDPatientApp.Models.BowelMovementLog", b =>
+                {
+                    b.HasOne("FYPIBDPatientApp.Models.ApplicationUser", "Patient")
+                        .WithMany("BowelMovementLog")
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("FYPIBDPatientApp.Models.Concent", b =>
@@ -841,6 +932,8 @@ namespace FYPIBDPatientApp.Migrations
             modelBuilder.Entity("FYPIBDPatientApp.Models.ApplicationUser", b =>
                 {
                     b.Navigation("AuditLog");
+
+                    b.Navigation("BowelMovementLog");
 
                     b.Navigation("Concent")
                         .IsRequired();

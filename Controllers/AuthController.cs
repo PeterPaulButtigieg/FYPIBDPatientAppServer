@@ -10,12 +10,12 @@ namespace FYPIBDPatientApp.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly TokenService _tokenService;
 
-        public AuthController(UserManager<IdentityUser> userManager, 
-               SignInManager<IdentityUser> signInManager, 
+        public AuthController(UserManager<ApplicationUser> userManager, 
+               SignInManager<ApplicationUser> signInManager, 
                TokenService tokenService)
         {
             _userManager = userManager;
@@ -57,7 +57,13 @@ namespace FYPIBDPatientApp.Controllers
             var user = new ApplicationUser 
             { 
                 UserName = model.Email,
-                Email = model.Email
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Gender = model.Gender,
+                DateOfBirth = model.DateOfBirth,
+                MobileNumber = model.MobileNumber,
+
             };
 
             var createResult = await _userManager.CreateAsync(user, model.Password);
@@ -66,7 +72,7 @@ namespace FYPIBDPatientApp.Controllers
                 return BadRequest(createResult.Errors);
             }
 
-            await _userManager.AddToRoleAsync(user, "User");
+            await _userManager.AddToRoleAsync(user, "Patient");
 
             return Ok("User registered successfully.");
         }
