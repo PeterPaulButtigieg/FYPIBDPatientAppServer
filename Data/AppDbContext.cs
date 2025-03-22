@@ -22,11 +22,8 @@ namespace FYPIBDPatientApp.Data
         public DbSet<Diagnosis> Diagnoses { get; set; }
         public DbSet<DietaryLog> DietaryLogs { get; set; }
         public DbSet<HydrationLog> HydrationLogs { get; set; }
-        public DbSet<LabOrder> LabOrders { get; set; }
-        public DbSet<LabResult> LabResults { get; set; }
         public DbSet<LifestyleLog> LifestyleLogs { get; set; }
-        public DbSet<Medication> Medications { get; set; }
-        public DbSet<Prescription> PatientMedications { get; set; }
+        public DbSet<Prescription> Prescriptions { get; set; }
         public DbSet<SymptomLog> SymptomLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -85,39 +82,39 @@ namespace FYPIBDPatientApp.Data
             .HasOne(a => a.Patient)
             .WithMany(u => u.PatientAppointments)
             .HasForeignKey(a => a.PatientId)
-            .OnDelete(DeleteBehavior.Restrict); 
+            .OnDelete(DeleteBehavior.Cascade); 
 
-            builder.Entity<Appointment>()
+            /*builder.Entity<Appointment>()
             .HasOne(a => a.HealthcareProfessional)
             .WithMany(u => u.ProfessionalAppointments)
             .HasForeignKey(a => a.HealthcareProfessionalId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Restrict);*/
 
             //Diagnoses
             builder.Entity<Diagnosis>()
             .HasOne(d => d.Patient)
             .WithMany(u => u.PatientDiagnoses)
             .HasForeignKey(d => d.PatientId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<Diagnosis>()
+            /*builder.Entity<Diagnosis>()
             .HasOne(d => d.HealthcareProfessional)
             .WithMany(u => u.ProfessionalDiagnoses)
             .HasForeignKey(d => d.HealthcareProfessionalId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Restrict);*/
 
             //Prescriptions
             builder.Entity<Prescription>()
             .HasOne(d => d.Patient)
             .WithMany(u => u.RecievedPrescription)
             .HasForeignKey(d => d.PatientId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<Prescription>()
+            /*builder.Entity<Prescription>()
             .HasOne(d => d.HealthcareProfessional)
             .WithMany(u => u.IssuedPrescription)
             .HasForeignKey(d => d.HealthcareProfessionalId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Restrict);*/
         }
     }
 }

@@ -1,15 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace FYPIBDPatientApp.Models
+﻿namespace FYPIBDPatientApp.Dtos
 {
-    public class Prescription
+    public class PrescriptionDto
     {
         public int Id { get; set; }
-  
-        public string PatientId { get; set; }
-        //[ForeignKey(nameof(PatientId))]
-        public ApplicationUser Patient { get; set; }
-        
         public string Medication { get; set; }
 
         public int Interval { get; set; }

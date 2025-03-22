@@ -16,9 +16,9 @@ namespace FYPIBDPatientApp.Models
 
         public int StressLevel { get; set; }
 
-        public DateTime SleepDuration { get; set; }
+        public TimeSpan SleepDuration { get; set; }
 
-        public DateTime Exercise {  get; set; }
+        public TimeSpan Exercise {  get; set; }
 
         public string Notes { get; set; }
     }

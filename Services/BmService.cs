@@ -35,7 +35,7 @@ namespace FYPIBDPatientApp.Services
 
         public async Task RecordBowelMovementLog(BowelMovementLogDto dto, string userId)
         {
-            var bowelMovementLog = new BowelMovementLog
+            var log = new BowelMovementLog
             {
                 PatientId = userId,
                 Date = DateTime.Now,
@@ -45,7 +45,7 @@ namespace FYPIBDPatientApp.Services
                 Notes = dto.Notes,
             };
 
-            await _repository.AddBowelMovementLog(bowelMovementLog);
+            await _repository.AddBowelMovementLog(log);
         }
 
         public async Task DeleteBowelMovementLog(int id)

@@ -6,9 +6,9 @@ namespace FYPIBDPatientApp.Repositories
 {
     public interface IHydRepository
     {
-        Task<HydrationLog> GetHydrationLogById(int id);
-        Task<List<HydrationLog>> GetHydrationLogsByPatientId(string userId);
-        Task<List<HydrationLog>> GetGetHydrationLogsForPatientOnDate(string userId, DateTime date);
+        Task<HydrationLog>GetHydrationLogById(int id);
+        Task<List<HydrationLog>>GetHydrationLogsByPatientId(string userId);
+        Task<List<HydrationLog>>GetGetHydrationLogsForPatientOnDate(string userId, DateTime date);
         Task AddHydrationLog(HydrationLog log);
         Task RemoveHydrationLog(HydrationLog log);
     }

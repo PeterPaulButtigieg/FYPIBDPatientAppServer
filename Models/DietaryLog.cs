@@ -14,9 +14,9 @@ namespace FYPIBDPatientApp.Models
 
         public DateTime Date { get; set; }
 
-        public string MealType { get; set; }
+        public string FoodItem { get; set; }
 
-        public int Calories { get; set; }
+        public string CookingMethod { get; set; }
 
         public string Notes { get; set; }
     }

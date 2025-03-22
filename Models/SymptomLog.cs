@@ -16,9 +16,7 @@ namespace FYPIBDPatientApp.Models
 
         public string SymptomType { get; set; }
 
-        public int severity { get; set; }
-
-        public DateTime Duration { get; set; }
+        public int Severity { get; set; }
 
         public string Notes { get; set; }
     }
