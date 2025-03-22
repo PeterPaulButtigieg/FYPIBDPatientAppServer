@@ -9,9 +9,9 @@ namespace FYPIBDPatientApp.Services
     {
         Task<Prescription> GetPrescription(int id);
         Task<List<Prescription>> GetPrescriptionsForPatient(string userId);
-        Task<List<Prescription>> GetPrescriptionsForPatientOnDate(string userId);
+        Task<List<Prescription>> GetPrescriptionsForPatientOnDate(string userId, DateTime date);
         Task NewPrescription(PrescriptionDto dto, string userId);
-        Task ModifyPrescription(PrescriptionDto dto, int id);
+        Task ModifyPrescription(PrescriptionDto dto, string userId);
         Task DeletePrescription(int id);
     }
 

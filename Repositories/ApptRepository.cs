@@ -12,6 +12,8 @@ namespace FYPIBDPatientApp.Repositories
         Task<List<Appointment>> GetFutureAppointmentsByPatientId(string patientId);
         Task<Appointment> GetNextAppointmentByPatientId(string id);
         Task AddAppointment(Appointment appointment);
+
+        Task RemoveAppointment(Appointment appointment);
     }
     public class ApptRepository : IApptRepository
     {
@@ -49,7 +51,12 @@ namespace FYPIBDPatientApp.Repositories
         public async Task AddAppointment(Appointment appointment)
         {
             _context.Appointments.Add(appointment);
+            await _context.SaveChangesAsync();
+        }
 
+        public async Task RemoveAppointment(Appointment appointment)
+        {
+            _context.Appointments.Remove(appointment);
             await _context.SaveChangesAsync();
         }
     }

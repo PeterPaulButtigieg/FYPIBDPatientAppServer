@@ -12,6 +12,7 @@ namespace FYPIBDPatientApp.Services
         Task<List<Appointment>> GetFutureAppointmentsForPatient(string userId);
         Task<Appointment> GetNextAppointmentForPatient(string userId);
         Task RecordAppointment (AppointmentDto dto, string userId);
+        Task DeleteAppointment (int id);
     }
 
     public class ApptService : IApptService
@@ -67,6 +68,18 @@ namespace FYPIBDPatientApp.Services
 
             await _repository.AddAppointment(appointment);
             await _logger.LogActionAsync(userId, "RecordAppointment");
+        }
+
+        public async Task DeleteAppointment(int id)
+        {
+            var appointment = await _repository.GetAppointmentById(id);
+
+            if (appointment == null)
+            {
+                return;
+            }
+
+            await _repository.RemoveAppointment(appointment);
         }
     }
 }
