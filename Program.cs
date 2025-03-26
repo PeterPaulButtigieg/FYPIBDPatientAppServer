@@ -68,6 +68,11 @@ builder.Services.AddSwaggerGen(options =>
 
     });
 
+    /*options.AddServer(new OpenApiServer
+    {
+        Url = "http://192.168.1.78:5276" // Adjust IP/port as needed
+    });*/
+
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
@@ -104,7 +109,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+
+app.Urls.Add("http://0.0.0.0:5276");
+app.Urls.Add("https://0.0.0.0:7197");
+
+//app.UseHttpsRedirection();
 
 app.UseCors("AllowAll");
 
