@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using FYPIBDPatientApp.Services;
 using FYPIBDPatientApp.Dtos;
 using FYPIBDPatientApp.Models;
+using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using FYPIBDPatientApp.Data;
 
 namespace FYPIBDPatientApp.Controllers
 {
@@ -13,14 +17,17 @@ namespace FYPIBDPatientApp.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly TokenService _tokenService;
+        private readonly AppDbContext _context;
 
         public AuthController(UserManager<ApplicationUser> userManager, 
                SignInManager<ApplicationUser> signInManager, 
-               TokenService tokenService)
+               TokenService tokenService,
+               AppDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
+            _context = context;
         }
 
         [HttpPost("login")]
@@ -38,12 +45,55 @@ namespace FYPIBDPatientApp.Controllers
                 return Unauthorized("Invalid credentials.");
             }
 
-            // to get roles assigned to the user
             var roles = await _userManager.GetRolesAsync(user);
 
-            // to generate the token
-            var token = _tokenService.CreateToken(user, roles);
-            return Ok(new { token });
+            var tokenResult = _tokenService.CreateToken(user, roles);
+
+            return Ok(tokenResult); // e.g. { accessToken, refreshToken, expires }
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout([FromBody] LogoutDto request)
+        {
+            if (string.IsNullOrEmpty(request.RefreshToken))
+            {
+                return BadRequest("Refresh token is required for logout.");
+            }
+
+            // Find the refresh token in the database.
+            var storedToken = await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken);
+            if (storedToken == null)
+            {
+                return BadRequest("Invalid refresh token.");
+            }
+
+            // Revoke the refresh token.
+            storedToken.isRevoked = true;
+            _context.RefreshTokens.Update(storedToken);
+            await _context.SaveChangesAsync();
+
+            return Ok("Logged out successfully.");
+        }
+
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh([FromBody] RefreshRequestDto request)
+        {
+            if (string.IsNullOrEmpty(request.RefreshToken))
+            {
+                return BadRequest("Refresh token is required.");
+            }
+
+            try
+            {
+                var tokenResult = await _tokenService.RefreshTokenAsync(request.RefreshToken);
+                return Ok(tokenResult);
+            }
+            catch (Exception ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
 
         [HttpPost("register")]

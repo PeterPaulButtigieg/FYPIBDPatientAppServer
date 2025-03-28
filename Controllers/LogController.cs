@@ -62,7 +62,7 @@ namespace FYPIBDPatientApp.Controllers
 
         [HttpPost("logHyd")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
+        //[Authorize(Roles = "Patient")]
         public async Task<IActionResult> LogHydration([FromBody] HydrationLogDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

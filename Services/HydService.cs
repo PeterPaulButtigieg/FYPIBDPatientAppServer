@@ -44,7 +44,7 @@ namespace FYPIBDPatientApp.Services
             var log = new HydrationLog
             {
                 PatientId = userId,
-                Date = DateTime.Now,
+                Date = dto.Date,
                 WaterIntake = dto.WaterIntake,
                 Notes = dto.Notes,
             };

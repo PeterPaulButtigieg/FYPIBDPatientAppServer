@@ -5,6 +5,7 @@ using System.Composition;
 using FYPIBDPatientApp.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection.Emit;
+using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 
 namespace FYPIBDPatientApp.Data
 {
@@ -25,6 +26,8 @@ namespace FYPIBDPatientApp.Data
         public DbSet<LifestyleLog> LifestyleLogs { get; set; }
         public DbSet<Prescription> Prescriptions { get; set; }
         public DbSet<SymptomLog> SymptomLogs { get; set; }
+
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
