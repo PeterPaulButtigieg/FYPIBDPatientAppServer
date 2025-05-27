@@ -2,7 +2,6 @@
 {
     public class BowelMovementLogDto
     {
-        //stool type, blood, urgency, notes
 
         public string StoolType { get; set; }
 

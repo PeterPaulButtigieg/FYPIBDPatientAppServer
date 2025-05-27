@@ -25,7 +25,6 @@ namespace FYPIBDPatientApp.Controllers
         //GET: api/clinical/appt/{id}
         [HttpGet("appt/{id}")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> GetAppointment(int id)
         {
             var appointment = await _apptService.GetAppointment(id);
@@ -39,7 +38,6 @@ namespace FYPIBDPatientApp.Controllers
         //GET: api/clinical/appt
         [HttpGet("appt")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> GetAppointments()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -56,7 +54,6 @@ namespace FYPIBDPatientApp.Controllers
         //GET: api/clinical/appt/f
         [HttpGet("appt/f")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> GetFutureAppointments()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -73,7 +70,6 @@ namespace FYPIBDPatientApp.Controllers
         //POST: api/clinical/appt
         [HttpPost("appt")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> AddAppointment([FromBody] AppointmentDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -87,7 +83,6 @@ namespace FYPIBDPatientApp.Controllers
         //DELETE: api/clinical/appt/{id}
         [HttpDelete("appt/{id}")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> DeleteAppointment(int id)
         {
             await _apptService.DeleteAppointment(id);
@@ -99,7 +94,6 @@ namespace FYPIBDPatientApp.Controllers
         //GET: api/clinical/ps/{id}
         [HttpGet("ps/{id}")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> GetPrescription(int id)
         {
             var prescription = await _psService.GetPrescription(id);
@@ -113,7 +107,6 @@ namespace FYPIBDPatientApp.Controllers
         //GET: api/clinical/ps
         [HttpGet("ps")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> GetPrescriptionsForPatient()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -127,7 +120,6 @@ namespace FYPIBDPatientApp.Controllers
         //GET: api/clinical/ps/date/{date}
         [HttpGet("ps/date/{date}")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> GetPrescriptionsForPatientOnDate(DateTime date)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -143,7 +135,6 @@ namespace FYPIBDPatientApp.Controllers
         //POST: api/clinical/ps
         [HttpPost("ps")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> AddPrescription([FromBody] PrescriptionDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -158,7 +149,6 @@ namespace FYPIBDPatientApp.Controllers
 
         [HttpPut("ps")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> UpdatePrescription([FromBody] PrescriptionDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -173,7 +163,6 @@ namespace FYPIBDPatientApp.Controllers
 
         [HttpDelete("ps/{id}")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> DeletePrescription(int id)
         {
             await _psService.DeletePrescription(id);

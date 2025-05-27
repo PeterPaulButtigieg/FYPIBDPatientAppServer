@@ -9,6 +9,7 @@ namespace FYPIBDPatientApp.Repositories
         Task<HydrationLog>GetHydrationLogById(int id);
         Task<List<HydrationLog>>GetHydrationLogsByPatientId(string userId);
         Task<List<HydrationLog>>GetGetHydrationLogsForPatientOnDate(string userId, DateTime date);
+        Task<List<HydrationLog>> GetHydrationLogsByPatientInRange(string userId, DateTime startInclusive, DateTime endExclusive);
         Task AddHydrationLog(HydrationLog log);
         Task RemoveHydrationLog(HydrationLog log);
     }
@@ -34,6 +35,15 @@ namespace FYPIBDPatientApp.Repositories
         public async Task<List<HydrationLog>> GetGetHydrationLogsForPatientOnDate(string userId, DateTime date)
         {
             return await _context.HydrationLogs.Where(a => a.PatientId == userId && a.Date == date).OrderBy(a => a.Date).ToListAsync();
+        }
+
+        public async Task<List<HydrationLog>> GetHydrationLogsByPatientInRange(string userId, DateTime startInclusive,DateTime endExclusive)
+        {
+            return await _context.HydrationLogs
+                .Where(l => l.PatientId == userId
+                         && l.Date >= startInclusive
+                         && l.Date < endExclusive)
+                .ToListAsync();
         }
 
         public async Task AddHydrationLog(HydrationLog log)

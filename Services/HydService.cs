@@ -10,6 +10,7 @@ namespace FYPIBDPatientApp.Services
         Task<HydrationLog>GetHydrationLog(int id);
         Task<List<HydrationLog>>GetHydrationLogsForPatient(string userId);
         Task<List<HydrationLog>>GetHydrationLogForPatienOnDate(string userId, DateTime date);
+        Task<(double TodayIntake, double PastSixDaysIntake)> GetHydrationTotalsForPatient(string userId);
         Task RecordHydrationLog(HydrationLogDto dto, string userId);
         Task DeleteHydrationLog(int id);
     }
@@ -37,6 +38,31 @@ namespace FYPIBDPatientApp.Services
         public async Task<List<HydrationLog>>GetHydrationLogForPatienOnDate(string userId, DateTime date)
         {
             return await _repository.GetGetHydrationLogsForPatientOnDate(userId, date);
+        }
+        public async Task<(double TodayIntake, double PastSixDaysIntake)> GetHydrationTotalsForPatient(string userId)
+        {
+            var today = DateTime.UtcNow.AddHours(2).Date;
+            var weekAgo = today.AddDays(-6);
+
+            var logs = await _repository.GetHydrationLogsByPatientInRange(
+                userId,
+                startInclusive: weekAgo,
+                endExclusive: today.AddDays(1)
+            );
+
+            var sumsByDate = logs
+                .GroupBy(l => l.Date.Date)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Sum(l => l.WaterIntake)
+                );
+
+            sumsByDate.TryGetValue(today, out var todayTotal);
+            var pastSix = sumsByDate
+                .Where(kvp => kvp.Key < today)
+                .Sum(kvp => kvp.Value);
+
+            return (todayTotal, pastSix);
         }
 
         public async Task RecordHydrationLog(HydrationLogDto dto, string userId)

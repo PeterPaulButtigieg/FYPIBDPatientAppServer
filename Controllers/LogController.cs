@@ -36,7 +36,6 @@ namespace FYPIBDPatientApp.Controllers
 
         [HttpPost("logBm")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> LogBowelMovement([FromBody] BowelMovementLogDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -49,7 +48,6 @@ namespace FYPIBDPatientApp.Controllers
 
         [HttpPost("logDiet")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> LogDiet([FromBody] DietaryLogDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -62,7 +60,6 @@ namespace FYPIBDPatientApp.Controllers
 
         [HttpPost("logHyd")]
         [Authorize]
-        //[Authorize(Roles = "Patient")]
         public async Task<IActionResult> LogHydration([FromBody] HydrationLogDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -75,7 +72,6 @@ namespace FYPIBDPatientApp.Controllers
 
         [HttpPost("LogLs")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> LogLifestyle([FromBody] LifestyleLogDto dto)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -88,7 +84,6 @@ namespace FYPIBDPatientApp.Controllers
 
         [HttpPost("LogSymp")]
         [Authorize]
-        [Authorize(Roles = "Patient")]
         public async Task<IActionResult> LogSymptom([FromBody] SymptomLogDto dto)
         {
             // Get the patient id from the token

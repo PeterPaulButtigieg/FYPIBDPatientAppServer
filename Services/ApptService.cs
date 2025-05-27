@@ -51,7 +51,7 @@ namespace FYPIBDPatientApp.Services
 
         public async Task RecordAppointment(AppointmentDto dto, string userId)
         {
-            if (dto.Date < DateTime.Now)
+            if (dto.Date.AddHours(2) < DateTime.Now)
             {
                 await _logger.LogActionAsync(userId, "RecordAppointmentFailed");
                 throw new ArgumentException("Appointment cannot be in the past.");
@@ -60,7 +60,7 @@ namespace FYPIBDPatientApp.Services
             var appointment = new Appointment
             {
                 PatientId = userId,
-                Date = dto.Date,
+                Date = dto.Date.AddHours(2),
                 Venue = dto.Venue,
                 AppointmentType = dto.AppointmentType,
                 Notes = dto.Notes,

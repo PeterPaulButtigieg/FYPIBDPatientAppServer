@@ -8,6 +8,8 @@ namespace FYPIBDPatientApp.Repositories
     {
         Task<LifestyleLog> GetLifestyleLogById(int id);
         Task<List<LifestyleLog>> GetLifestyleLogsByPatientId(string userId);
+        Task<List<LifestyleLog>> GetLifestyleLogsByPatientOnDate(string userId, DateTime date);
+        Task<List<LifestyleLog>> GetLifestyleLogsByPatientInRange(string userId, DateTime startInclusive, DateTime endExclusive);
         Task AddLifestyleLog(LifestyleLog log);
         Task RemoveLifestyleLog(LifestyleLog log);
     }
@@ -28,6 +30,20 @@ namespace FYPIBDPatientApp.Repositories
         public async Task<List<LifestyleLog>> GetLifestyleLogsByPatientId(string userId)
         {
             return await _context.LifestyleLogs.Where(a => a.PatientId == userId).OrderBy(a => a.Date).ToListAsync();
+        }
+
+        public async Task<List<LifestyleLog>> GetLifestyleLogsByPatientOnDate(string userId, DateTime date)
+        {
+            return await _context.LifestyleLogs.Where(a => a.PatientId == userId && a.Date == date).OrderBy(a => a.Date).ToListAsync();
+        }
+
+        public async Task<List<LifestyleLog>> GetLifestyleLogsByPatientInRange(string userId, DateTime startInclusive, DateTime endExclusive)
+        {
+            return await _context.LifestyleLogs
+                .Where(l => l.PatientId == userId
+                         && l.Date >= startInclusive
+                         && l.Date < endExclusive)
+                .ToListAsync();
         }
 
         public async Task AddLifestyleLog(LifestyleLog log)

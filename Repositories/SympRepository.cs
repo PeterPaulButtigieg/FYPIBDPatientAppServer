@@ -8,6 +8,8 @@ namespace FYPIBDPatientApp.Repositories
     {
         Task<SymptomLog>GetSymptomLogById(int id);
         Task<List<SymptomLog>>GetSymptomLogsByPatientId(string userId);
+        Task<List<SymptomLog>> GetSymptomLogsByPatientOnDate(string userId, DateTime date);
+        Task<List<SymptomLog>> GetSymptomLogsByPatientInRange(string userId, DateTime startInclusive, DateTime endExclusive);
         Task AddSymptomLog(SymptomLog log);
         Task RemoveSymptomLog(SymptomLog log);
 
@@ -29,6 +31,20 @@ namespace FYPIBDPatientApp.Repositories
         public async Task<List<SymptomLog>> GetSymptomLogsByPatientId(string userId)
         {
             return await _context.SymptomLogs.Where(a => a.PatientId == userId).OrderBy(a => a.Date).ToListAsync();
+        }
+
+        public async Task<List<SymptomLog>> GetSymptomLogsByPatientOnDate(string userId, DateTime date)
+        {
+            return await _context.SymptomLogs.Where(a => a.PatientId == userId && a.Date == date).OrderBy(a => a.Date).ToListAsync();
+        }
+
+        public async Task<List<SymptomLog>> GetSymptomLogsByPatientInRange(string userId, DateTime startInclusive, DateTime endExclusive)
+        {
+            return await _context.SymptomLogs
+                .Where(l => l.PatientId == userId
+                         && l.Date >= startInclusive
+                         && l.Date < endExclusive)
+                .ToListAsync();
         }
 
         public async Task AddSymptomLog(SymptomLog log)

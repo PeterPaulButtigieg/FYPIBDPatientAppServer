@@ -63,7 +63,7 @@ namespace FYPIBDPatientApp.Services
                 StartDate = dto.StartDate,
                 EndDate = dto.EndDate,
                 Interval = dto.Interval,
-                Frequency = dto.Frequency,
+                Frequency = dto.Notes,
             };
 
             await _repository.AddPrescription(prescription);
@@ -85,7 +85,7 @@ namespace FYPIBDPatientApp.Services
 
             existingPrescription.Medication = dto.Medication;
             existingPrescription.Interval = dto.Interval;
-            existingPrescription.Frequency = dto.Frequency;
+            existingPrescription.Frequency = dto.Notes;
             existingPrescription.StartDate = dto.StartDate;
             existingPrescription.EndDate = dto.EndDate;
 

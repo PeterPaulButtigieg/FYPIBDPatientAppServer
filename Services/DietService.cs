@@ -13,6 +13,7 @@ namespace FYPIBDPatientApp.Services
         Task<DietaryLog> GetDietaryLog(int id);
         Task<List<DietaryLog>> GetDietaryLogsForPatient(string userId);
         Task<List<DietaryLog>> GetDietaryLogsForPatientOnDate(string userId, DateTime date);
+        Task<List<DietaryLog>> GetDietaryRecap(string userId);
         Task RecordDietaryLog(DietaryLogDto dto, string userId);
         Task DeleteDietaryLog(int id);
     }
@@ -42,6 +43,20 @@ namespace FYPIBDPatientApp.Services
             return await _repository.GetDietaryLogsByPatientIdOnDate(userId, date);
         }
 
+        public async Task<List<DietaryLog>> GetDietaryRecap(string userId)
+        {
+            var today = DateTime.UtcNow.AddHours(2).Date;
+            var weekAgo = today.AddDays(-6);
+
+            var logs = await _repository.GetDietaryLogsByPatientInRange(
+                userId,
+                startInclusive: weekAgo,
+                endExclusive: today.AddDays(1)
+            );
+
+            return logs;
+        }
+
         public async Task RecordDietaryLog(DietaryLogDto dto, string userId)
         {
             var log = new DietaryLog
@@ -49,7 +64,7 @@ namespace FYPIBDPatientApp.Services
                 PatientId = userId,
                 Date = dto.Date,
                 FoodItem = dto.FoodItem,
-                CookingMethod = dto.CookingMethod,
+                Healthiness = dto.Healthiness,
                 Notes = dto.Notes,
             };
 

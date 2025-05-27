@@ -8,6 +8,8 @@ namespace FYPIBDPatientApp.Repositories
     {
         Task<BowelMovementLog> GetBowelMovementLogById(int id);
         Task<List<BowelMovementLog>> GetBowelMovementLogsByPatientId(string userId);
+        Task<List<BowelMovementLog>> GetBowelMovementLogsByPatientOnDate(string userId, DateTime date);
+        Task<List<BowelMovementLog>> GetBowelMovementLogsByPatientInRange(string userId, DateTime startInclusive, DateTime endExclusive);
         Task AddBowelMovementLog(BowelMovementLog log);
         Task RemoveBowelMovementLog(BowelMovementLog log);
     }
@@ -28,6 +30,20 @@ namespace FYPIBDPatientApp.Repositories
         public async Task<List<BowelMovementLog>> GetBowelMovementLogsByPatientId(string userId)
         {
             return await _context.BowelMovementLogs.Where(a => a.PatientId == userId).OrderBy(a => a.Date).ToListAsync();
+        }
+
+        public async Task<List<BowelMovementLog>> GetBowelMovementLogsByPatientOnDate(string userId, DateTime date)
+        {
+            return await _context.BowelMovementLogs.Where(a => a.PatientId == userId && a.Date == date).OrderBy(a => a.Date).ToListAsync();
+        }
+
+        public async Task<List<BowelMovementLog>> GetBowelMovementLogsByPatientInRange(string userId, DateTime startInclusive, DateTime endExclusive)
+        {
+            return await _context.BowelMovementLogs
+                .Where(l => l.PatientId == userId
+                         && l.Date >= startInclusive
+                         && l.Date < endExclusive)
+                .ToListAsync();
         }
 
         public async Task AddBowelMovementLog(BowelMovementLog log)

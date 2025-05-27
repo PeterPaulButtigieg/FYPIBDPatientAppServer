@@ -9,6 +9,7 @@ namespace FYPIBDPatientApp.Repositories
         Task<DietaryLog> GetDietaryLogById(int id);
         Task<List<DietaryLog>> GetDietaryLogsByPatientId(string userId);
         Task<List<DietaryLog>> GetDietaryLogsByPatientIdOnDate(string userId, DateTime date);
+        Task<List<DietaryLog>> GetDietaryLogsByPatientInRange(string userId, DateTime startInclusive, DateTime endExclusive);
         Task AddDietaryLog(DietaryLog log);
         Task RemoveDietaryLog(DietaryLog log);
     }
@@ -35,6 +36,15 @@ namespace FYPIBDPatientApp.Repositories
         public async Task<List<DietaryLog>> GetDietaryLogsByPatientIdOnDate(string userId, DateTime date)
         {
             return await _context.DietaryLogs.Where(a => a.PatientId == userId && a.Date == date).OrderBy(a => a.Date).ToListAsync();
+        }
+
+        public async Task<List<DietaryLog>> GetDietaryLogsByPatientInRange(string userId, DateTime startInclusive, DateTime endExclusive)
+        {
+            return await _context.DietaryLogs
+                .Where(l => l.PatientId == userId
+                         && l.Date >= startInclusive
+                         && l.Date < endExclusive)
+                .ToListAsync();
         }
 
         public async Task AddDietaryLog(DietaryLog log)

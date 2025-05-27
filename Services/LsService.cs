@@ -11,6 +11,9 @@ namespace FYPIBDPatientApp.Services
     {
         Task<LifestyleLog> GetLifestyleLog(int id);
         Task<List<LifestyleLog>> GetLifestyleLogsForPatient(string userId);
+        Task<List<(double value, string label)>> GetSleepRecapForPatient(string userId);
+        Task<List<(double value, string label)>> GetExerciseRecapForPatient(string userId);
+        Task<List<(double value, string label)>> GetMoodRecapForPatient(string userId);
         Task RecordLifestyleLog(LifestyleLogDto dto, string userId);
         Task DeleteLifestyleLog(int id);
     }
@@ -35,6 +38,106 @@ namespace FYPIBDPatientApp.Services
         {
             return await _repository.GetLifestyleLogsByPatientId(userId);
         }
+
+        public async Task<List<(double value, string label)>> GetSleepRecapForPatient(string userId)
+        {
+            var todayUtc = DateTime.UtcNow.Date;
+            var weekAgoUtc = todayUtc.AddDays(-6);
+
+            var logs = await _repository.GetLifestyleLogsByPatientInRange(
+                userId,
+                startInclusive: weekAgoUtc,
+                endExclusive: todayUtc.AddDays(1)
+            );
+
+
+            var sumsByDate = logs
+                .GroupBy(l => l.Date.Date)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Sum(l => l.SleepDuration.TotalHours)
+                );
+
+            var recap =  Enumerable
+                .Range(0, 7)
+                .Select(offset => {
+                    var date = weekAgoUtc.AddDays(offset);
+                    sumsByDate.TryGetValue(date, out var hours);
+                    return (value: Math.Round(hours, 2),
+                             label: date.ToString("ddd"));
+                })
+                .ToList();
+
+            return recap;
+        }
+
+        public async Task<List<(double value, string label)>> GetExerciseRecapForPatient(string userId)
+        {
+            var todayUtc = DateTime.UtcNow.Date;
+            var weekAgoUtc = todayUtc.AddDays(-6);
+
+            var logs = await _repository.GetLifestyleLogsByPatientInRange(
+                userId,
+                startInclusive: weekAgoUtc,
+                endExclusive: todayUtc.AddDays(1)
+            );
+
+
+            var sumsByDate = logs
+                .GroupBy(l => l.Date.Date)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Sum(l => l.Exercise.TotalHours)
+                );
+
+            var recap = Enumerable
+                .Range(0, 7)
+                .Select(offset => {
+                    var date = weekAgoUtc.AddDays(offset);
+                    sumsByDate.TryGetValue(date, out var hours);
+                    return (value: Math.Round(hours, 2),
+                             label: date.ToString("ddd"));
+                })
+                .ToList();
+
+            return recap;
+        }
+
+        public async Task<List<(double value, string label)>> GetMoodRecapForPatient(string userId)
+        {
+            var todayUtc = DateTime.UtcNow.Date;
+            var weekAgoUtc = todayUtc.AddDays(-6);
+
+            var logs = await _repository.GetLifestyleLogsByPatientInRange(
+                userId,
+                startInclusive: weekAgoUtc,
+                endExclusive: todayUtc.AddDays(1)
+            );
+
+
+            var avgByDate = logs
+                .GroupBy(l => l.Date.Date)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Any()
+                        ? g.Average(l => l.StressLevel)
+                        : 0.0
+                );
+
+            var recap = Enumerable
+                .Range(0, 7)
+                .Select(offset => {
+                    var date = weekAgoUtc.AddDays(offset);
+                    avgByDate.TryGetValue(date, out var avg);
+                    return (value: Math.Round(avg, 2),
+                             label: date.ToString("ddd"));
+                })
+                .ToList();
+
+            return recap;
+        }
+
+
         public async Task RecordLifestyleLog(LifestyleLogDto dto, string userId)
         {
             TimeSpan sleepDuration;
@@ -49,23 +152,17 @@ namespace FYPIBDPatientApp.Services
                 throw new ArgumentException("Invalid sleep duration format. Expected ISO 8601 format.", ex);
             }
 
-            if (sleepDuration < TimeSpan.Zero)
-                throw new ArgumentException("Sleep duration must be non-negative.");
-
-            if (exercise < TimeSpan.Zero)
-                throw new ArgumentException("Exercise duration must be non-negative.");
-
-            if (dto.StressLevel < 0)
-                throw new ArgumentException("Stress level must be non-negative.");
-
             var log = new LifestyleLog
             {
                 PatientId = userId,
-                Date = DateTime.Now,
+                Date = DateTime.UtcNow,
                 SleepDuration = sleepDuration,
                 Exercise = exercise,
-                StressLevel = dto.StressLevel
+                StressLevel = dto.StressLevel,
+                Notes = dto.Notes ?? string.Empty
             };
+
+            await _repository.AddLifestyleLog(log);
         }
 
         public async Task DeleteLifestyleLog(int id)

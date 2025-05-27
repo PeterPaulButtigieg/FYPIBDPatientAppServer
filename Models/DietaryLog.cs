@@ -16,7 +16,7 @@ namespace FYPIBDPatientApp.Models
 
         public string FoodItem { get; set; }
 
-        public string CookingMethod { get; set; }
+        public int Healthiness { get; set; }
 
         public string Notes { get; set; }
     }

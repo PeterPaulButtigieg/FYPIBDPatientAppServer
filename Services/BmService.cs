@@ -9,6 +9,7 @@ namespace FYPIBDPatientApp.Services
     {
         Task<BowelMovementLog> GetBowelMovementLog(int id);
         Task<List<BowelMovementLog>> GetBowelMovementLogsForPatient(string userId);
+        Task<List<(int value, string label)>> GetBowelMovementRecapForPatient(string userId);
         Task RecordBowelMovementLog(BowelMovementLogDto dto, string userId);
         Task DeleteBowelMovementLog(int id);
     }
@@ -31,6 +32,35 @@ namespace FYPIBDPatientApp.Services
         public async Task<List<BowelMovementLog>> GetBowelMovementLogsForPatient(string userId)
         {
             return await _repository.GetBowelMovementLogsByPatientId(userId);
+        }
+
+        public async Task<List<(int value, string label)>> GetBowelMovementRecapForPatient(string userId)
+        {
+            var today = DateTime.UtcNow.AddHours(2).Date;
+            var weekAgo = today.AddDays(-6);
+
+            var logs = await _repository.GetBowelMovementLogsByPatientInRange(
+                userId,
+                startInclusive: weekAgo,
+                endExclusive: today.AddDays(1)
+            );
+
+            var countsByDate = logs
+                .GroupBy(l => l.Date.Date)
+                .ToDictionary(g => g.Key, g => g.Count());
+
+            var recap = Enumerable
+                .Range(0, 7)
+                .Select(offset =>
+                {
+                    var date = weekAgo.AddDays(offset);
+                    countsByDate.TryGetValue(date, out var cnt);
+                    return (value: cnt,
+                             label: date.ToString("ddd"));
+                })
+                .ToList();
+
+            return recap;
         }
 
         public async Task RecordBowelMovementLog(BowelMovementLogDto dto, string userId)
