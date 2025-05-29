@@ -68,7 +68,7 @@ namespace FYPIBDPatientApp.Data
             };
 
             PasswordHasher<ApplicationUser> passwordHasher = new PasswordHasher<ApplicationUser>();
-            user.PasswordHash = passwordHasher.HashPassword(user, "password");
+            user.PasswordHash = passwordHasher.HashPassword(user, "123456Pass*");
             builder.Entity<ApplicationUser>().HasData(user);
 
             builder.Entity<IdentityUserRole<string>>().HasData(
