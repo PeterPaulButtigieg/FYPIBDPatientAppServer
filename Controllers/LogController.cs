@@ -86,12 +86,10 @@ namespace FYPIBDPatientApp.Controllers
         [Authorize]
         public async Task<IActionResult> LogSymptom([FromBody] SymptomLogDto dto)
         {
-            // Get the patient id from the token
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized("User not found.");
 
-            // Call the service layer to record the symptom log
             await _sympService.RecordSymptomLog(dto, userId);
             return Ok("Symptom log recorded successfully.");
         }

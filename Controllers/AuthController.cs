@@ -49,7 +49,7 @@ namespace FYPIBDPatientApp.Controllers
 
             var tokenResult = _tokenService.CreateToken(user, roles);
 
-            return Ok(tokenResult); // e.g. { accessToken, refreshToken, expires }
+            return Ok(tokenResult); //{ accessToken, refreshToken, expires }
         }
 
         [Authorize]
@@ -61,14 +61,14 @@ namespace FYPIBDPatientApp.Controllers
                 return BadRequest("Refresh token is required for logout.");
             }
 
-            // Find the refresh token in the database.
+            //Find the refresh token in the database.
             var storedToken = await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Token == request.RefreshToken);
             if (storedToken == null)
             {
                 return BadRequest("Invalid refresh token.");
             }
 
-            // Revoke the refresh token.
+            //Revoke the refresh token.
             storedToken.isRevoked = true;
             _context.RefreshTokens.Update(storedToken);
             await _context.SaveChangesAsync();
