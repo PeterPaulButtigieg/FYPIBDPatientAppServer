@@ -14,6 +14,8 @@ This repository contains the source code for the backend API that powers the IBD
 After cloning the repository open with Visual Studio and run.
 Leave the server running uninterrupted while using the app.
 
+---
+
 ## Demo User
 A demo user has been seeded for quick demonstration purposes, the credentials are as follows:
 
