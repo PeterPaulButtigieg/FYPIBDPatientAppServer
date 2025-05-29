@@ -132,6 +132,19 @@ namespace FYPIBDPatientApp.Controllers
             return Ok(prescriptions);
         }
 
+        //GET: api/clinical/ps/c/
+        [HttpGet("ps/c")]
+        [Authorize]
+        public async Task<IActionResult> GetCurrentPrescriptionsForPatient()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized("User not found.");
+
+            var prescriptions = await _psService.GetCurrentPrescriptionsForPatient(userId);
+            return Ok(prescriptions);
+        }
+
         //POST: api/clinical/ps
         [HttpPost("ps")]
         [Authorize]

@@ -19,8 +19,6 @@ namespace FYPIBDPatientApp.Data
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<BowelMovementLog> BowelMovementLogs { get; set; }
-        public DbSet<Concent> Concents { get; set; }
-        public DbSet<Diagnosis> Diagnoses { get; set; }
         public DbSet<DietaryLog> DietaryLogs { get; set; }
         public DbSet<HydrationLog> HydrationLogs { get; set; }
         public DbSet<LifestyleLog> LifestyleLogs { get; set; }
@@ -51,16 +49,17 @@ namespace FYPIBDPatientApp.Data
                 }
             );
 
-            //Seeding a HealthCareProfessional(Admin)
+            //Seeding the demo user
+
             ApplicationUser user = new ApplicationUser()
             {
                 Id = "134c1566-3f64-4ab4-b1e7-2ffe11f43e32",
-                UserName = "drsmith@gmail.com",
-                NormalizedUserName = "DRSMITH@GMAIL.COM",
-                Email = "drsmith@gmail.com",
-                NormalizedEmail = "DRSMITH@GMAIL.COM",
-                FirstName = "John",
-                LastName = "Smith",
+                UserName = "user@demo.com",
+                NormalizedUserName = "USER@DEMO.COM",
+                Email = "user@demo.com",
+                NormalizedEmail = "USER@DEMO.COM",
+                FirstName = "Demo",
+                LastName = "User",
                 Gender = "M",
                 DateOfBirth = new DateTime(1988, 2, 26),
                 LockoutEnabled = false,
@@ -75,7 +74,7 @@ namespace FYPIBDPatientApp.Data
             builder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string>
                 {
-                    RoleId = "2E1B51E9-1B52-424D-B4DA-07AFA32FD9DD",
+                    RoleId = "F0C7924B-3C4E-4C5F-B8F5-1EE0D65D422F",
                     UserId = "134c1566-3f64-4ab4-b1e7-2ffe11f43e32"
                 }
             );
@@ -87,25 +86,6 @@ namespace FYPIBDPatientApp.Data
             .HasForeignKey(a => a.PatientId)
             .OnDelete(DeleteBehavior.Cascade); 
 
-            /*builder.Entity<Appointment>()
-            .HasOne(a => a.HealthcareProfessional)
-            .WithMany(u => u.ProfessionalAppointments)
-            .HasForeignKey(a => a.HealthcareProfessionalId)
-            .OnDelete(DeleteBehavior.Restrict);*/
-
-            //Diagnoses
-            builder.Entity<Diagnosis>()
-            .HasOne(d => d.Patient)
-            .WithMany(u => u.PatientDiagnoses)
-            .HasForeignKey(d => d.PatientId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-            /*builder.Entity<Diagnosis>()
-            .HasOne(d => d.HealthcareProfessional)
-            .WithMany(u => u.ProfessionalDiagnoses)
-            .HasForeignKey(d => d.HealthcareProfessionalId)
-            .OnDelete(DeleteBehavior.Restrict);*/
-
             //Prescriptions
             builder.Entity<Prescription>()
             .HasOne(d => d.Patient)
@@ -113,11 +93,7 @@ namespace FYPIBDPatientApp.Data
             .HasForeignKey(d => d.PatientId)
             .OnDelete(DeleteBehavior.Cascade);
 
-            /*builder.Entity<Prescription>()
-            .HasOne(d => d.HealthcareProfessional)
-            .WithMany(u => u.IssuedPrescription)
-            .HasForeignKey(d => d.HealthcareProfessionalId)
-            .OnDelete(DeleteBehavior.Restrict);*/
+        
         }
     }
 }

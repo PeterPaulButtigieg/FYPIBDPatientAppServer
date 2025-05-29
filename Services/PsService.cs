@@ -10,6 +10,7 @@ namespace FYPIBDPatientApp.Services
         Task<Prescription> GetPrescription(int id);
         Task<List<Prescription>> GetPrescriptionsForPatient(string userId);
         Task<List<Prescription>> GetPrescriptionsForPatientOnDate(string userId, DateTime date);
+        Task<List<Prescription>> GetCurrentPrescriptionsForPatient(string userId);
         Task NewPrescription(PrescriptionDto dto, string userId);
         Task ModifyPrescription(PrescriptionDto dto, string userId);
         Task DeletePrescription(int id);
@@ -52,6 +53,11 @@ namespace FYPIBDPatientApp.Services
             }).ToList();
 
             return duePrescriptions;
+        }
+
+        public async Task<List<Prescription>> GetCurrentPrescriptionsForPatient(string userId)
+        {
+            return await _repository.GetActivePrescriptionsByPatientId(userId);
         }
 
         public async Task NewPrescription(PrescriptionDto dto, string userId)

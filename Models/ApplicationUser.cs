@@ -20,11 +20,9 @@ namespace FYPIBDPatientApp.Models
         //Other stuff
         public List<Appointment> PatientAppointments { get; set; } = new List<Appointment>();
         public List<Prescription> RecievedPrescription { get; set;} = new List<Prescription>();
-        public List<Diagnosis> PatientDiagnoses { get; set; } = new List<Diagnosis>();
 
         //Legal
         public List<AuditLog> AuditLog { get; set; } = new List<AuditLog>();
-        public Concent Concent { get; set; }
         public bool isDeleted { get; set; } 
 
         //HealthCare Professionals, they can be sick too. Anyways Identity doesnt like separate user collections.
